@@ -1,6 +1,9 @@
 package ma.ac.emi.ginfo.restfull.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,8 +18,8 @@ public class Owner {
     String username;
     String email;
     String password;
-    @OneToMany(fetch = FetchType.LAZY)
-    Collection<Bike> bikes;
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
+    List<Bike> bikes = new ArrayList<>();
 
     public Owner() {
     }
@@ -78,12 +81,20 @@ public class Owner {
         this.password = password;
     }
 
-    public Collection<Bike> getBikes() {
+    public List<Bike> getBikes() {
         return bikes;
     }
 
-    public void setBikes(Collection<Bike> bikes) {
+    public void setBikes(List<Bike> bikes) {
         this.bikes = bikes;
+    }
+    public boolean add(Bike bike) {
+        bike.setOwner(this);
+        return bikes.add(bike);
+    }
+
+    public boolean remove(Object o) {
+        return bikes.remove(o);
     }
 
 }

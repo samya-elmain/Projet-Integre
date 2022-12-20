@@ -1,6 +1,10 @@
 package ma.ac.emi.ginfo.restfull.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Entity
@@ -14,26 +18,19 @@ public class Bike {
     String model;
     String description;
     String pictures;
+    @Enumerated(EnumType.STRING)
     PointRencontre localisation;
-    Long price;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id")
-    Owner owner;
+    double price;
     int stars;
     boolean favourite;
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
+    @JsonIgnore
+    Owner owner;
     public Bike() {
     }
 
-    public Bike(String name, String category, String brand, String model, String description, String pictures, PointRencontre localisation, Long price, Owner owner) {
+    public Bike(String name, String category, String brand, String model, String description, String pictures, PointRencontre localisation, double price) {
         this.name = name;
         this.category = category;
         this.brand = brand;
@@ -42,7 +39,6 @@ public class Bike {
         this.pictures = pictures;
         this.localisation = localisation;
         this.price = price;
-        this.owner = owner;
     }
 
 
@@ -110,11 +106,11 @@ public class Bike {
         this.localisation = localisation;
     }
 
-    public Long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -134,6 +130,13 @@ public class Bike {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+    public Owner getOwner() {
+        return owner;
+    }
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
 
 
 }

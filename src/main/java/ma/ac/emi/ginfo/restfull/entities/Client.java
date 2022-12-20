@@ -1,6 +1,9 @@
 package ma.ac.emi.ginfo.restfull.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,8 +17,9 @@ public class Client {
     String username;
     String email;
     String password;
-
-
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY)
+    List<Location> locations = new ArrayList<>();
     public Client() {
     }
 
@@ -75,4 +79,11 @@ public class Client {
         this.password = password;
     }
 
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
 }
